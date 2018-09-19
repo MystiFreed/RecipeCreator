@@ -1,4 +1,6 @@
 package view;
+// Mysti Freed, mrfreed@dmacc.edu 
+// 9/19/2018
 
 import java.util.List;
 import java.util.Scanner;
@@ -8,31 +10,44 @@ import model.RecipeImport;
 
 public class RecipeCreate {
 
-	static Scanner in = new Scanner(System.in);
-	static RecipeImportHelper rih = new RecipeImportHelper();
+	static Scanner in = new Scanner(System.in); // accepts the values entered by the user
+	static RecipeImportHelper rih = new RecipeImportHelper(); 
 
+	/**
+	 * Add an item to the recipe. 
+	 * ID - auto-incremented, cannot be null, Primary Key;
+	 * Quantity - decimal, limited to 5 numbers with 2 decimal places;
+	 * Measurement - varchar, limit of 5 (might need to update to accept more for ounces, etc)
+	 * Component - varchar, limit 35 
+	 */
 	private static void addLineItem() {
 
-		System.out.print("Enter the amount (decimals are allowed, for example - 1.25): ");
-		Double quantity = in.nextDouble();
-		System.out.print("Enter the measurement (T for tablespoon, tsp for teaspoon, or cups, etc): ");
-		String measurement = in.nextLine();
 		System.out.println("Enter the recipe component: ");
 		String component = in.nextLine();
-		RecipeImport toAdd = new RecipeImport(quantity, measurement, component);
+		System.out.print("Enter the measurement (Limit to 5 characters): ");
+		String measurement = in.nextLine();
+		System.out.print("Enter the amount (decimals are allowed, for example - 1.25): ");
+		Double quantity = in.nextDouble();
+		RecipeImport toAdd = new RecipeImport(component, measurement, quantity);
 		rih.insertComponent(toAdd);
 	}
 
+	/**
+	 * Remove an item from the recipe. Only option is for the component, I didn't think
+	 * a user would realistically want to remove by the other variable options.
+	 */
 	private static void deleteAnItem() {
 		
-		System.out.print("Enter the quantity of the recipe component to delete: ");
-		Double quantity = in.nextDouble();
 		System.out.print("Enter the component to delete: ");
 		String component = in.nextLine();
-		RecipeImport toRemove = new RecipeImport(quantity, component);
+		RecipeImport toRemove = new RecipeImport(component);
 		rih.removeComponent(toRemove);
 	}
 
+	/**
+	 * Allow user to update quantity, measurement or component after cooking. Search by and update by any
+	 * variable.
+	 */
 	private static void recipeUpdate() {
 		
 		System.out.println("How would you like to search? ");
@@ -41,14 +56,14 @@ public class RecipeCreate {
 		System.out.println("3 : Search by component");
 		int searchBy = in.nextInt();
 		in.nextLine();
-		List<RecipeImport> foundIt;
-		/*if (searchBy == 1) {
+		List<RecipeImport> foundIt = null; // changed to null
+		if (searchBy == 1) {
 			System.out.print("Enter the quantity of the component: ");
 			Double componentQuantity = in.nextDouble();
 			foundIt = rih.searchForComponentByQuantity(componentQuantity);
 		} 
 		else if (searchBy == 2) {
-			System.out.print("Enter the measurement: ");
+			System.out.print("Enter the measurement (limit 5 characters): ");
 			String componentMeasure = in.nextLine();
 			foundIt = rih.searchForComponentByMeasurement(componentMeasure);
 		}
@@ -79,7 +94,7 @@ public class RecipeCreate {
 				toUpdate.setQuantity(newQuantity);
 			} 
 			else if (update == 2) {
-				System.out.print("New measurement: ");
+				System.out.print("New measurement (limit 5 characters): ");
 				String newMeasurement = in.nextLine();
 				toUpdate.setMeasurement(newMeasurement);
 			}
@@ -88,18 +103,23 @@ public class RecipeCreate {
 				String newComponent = in.nextLine();
 				toUpdate.setComponent(newComponent);
 			}
-
 			rih.updateRecipe(toUpdate);
-
 		} else {
 			System.out.println("That item is not in the recipe.");
-		}*/
+		}
 	}
 
+	/**
+	 * Run the start menu automatically when the program is clicked
+	 * @param args = user options
+	 */
 	public static void main(String[] args) {
 		runMenu();
 	}
 
+	/**
+	 * Start menu options available for the user selection
+	 */
 	public static void runMenu() {
 		boolean goAgain = true;
 		System.out.println("Recipe Creator, please select and option from the below list:");
@@ -130,14 +150,19 @@ public class RecipeCreate {
 				System.out.println("   Goodbye!   ");
 				goAgain = false;
 			}
-
+		}
 		}
 
-	}
-
+	/**
+	 * Show full recipe for the user to leverage for cooking/printing
+	 */
 	private static void showRecipe() {
+		List<RecipeImport> fullRecipe = rih.showRecipe();
+		for(RecipeImport r : fullRecipe) {
+			r.printRecipe();
+		}
 	}
+	}
+	
 
-
-}
 

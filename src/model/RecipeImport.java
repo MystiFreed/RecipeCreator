@@ -1,6 +1,8 @@
 package model;
+// Mysti Freed, mrfreed@dmacc.edu
+// 9/19/2018
+
 // This program is the annotated entity for the RecipeCreator program. 
-// Mysti Freed 9/16/2018
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,14 +29,13 @@ public class RecipeImport {
 	public RecipeImport() { // default constructor
 	}
 	
-	public RecipeImport(double q, String m, String c) { // non-default constructor
-		this.quantity = q;
-		this.measurement = m;
+	public RecipeImport(String c, String m, double q) { // non-default constructor
 		this.component = c;
+		this.measurement = m;
+		this.quantity = q;
 	}
 	
-	public RecipeImport(double q, String c) { // constructor for remove method
-		this.quantity = q;
+	public RecipeImport(String c) { // constructor for remove method
 		this.component = c;
 	}
 
@@ -73,12 +74,8 @@ public class RecipeImport {
 	// this method prints each recipe quantity, measurement and component line by line until no other
 	// components remain
 	public void printRecipe() { 
-		int count = 0;
-		while (count < id) {
-			System.out.println(quantity + " " + measurement + " " + component); //this. or just the variable?
-			count++;
+		System.out.println(quantity + " " + measurement + " " + component);
 		}
-	}
 	
 	// to string for all variables
 	@Override
